@@ -1,42 +1,47 @@
 abstract class Climatizacion {
     protected boolean estadoClimatizacion = false;
-    protected int temperatura = 20; // Valor inicial
-    protected int nivelVentilacion = 1; // Valor inicial
+    protected int temperatura = 20;
+    protected int nivelVentilacion = 1;
 
-    public void encender() {
+    public String encender() {
         estadoClimatizacion = true;
+        return "Climatización encendida.";
     }
 
-    public void apagar() {
+    public String apagar() {
         estadoClimatizacion = false;
+        return "Climatización apagada.";
     }
 
-    public void ajustarTemperatura(int grados) {
+    public String ajustarTemperatura(int grados) {
         if (estadoClimatizacion) {
             temperatura += grados;
-        } else {
-            throw new IllegalStateException("Error: La climatización está apagada.");
+            return "Temperatura ajustada a " + temperatura + " grados.";
         }
+        return "Error: La climatización está apagada.";
     }
 
-    public void modoAutomatico() {
-        if (!estadoClimatizacion) {
-            throw new IllegalStateException("Error: La climatización está apagada.");
+    public String modoAutomatico() {
+        if (estadoClimatizacion) {
+            temperatura = obtenerTemperaturaExterna();
+            return "Modo automático activado. Temperatura ajustada a " + temperatura + " grados.";
         }
-        // Implementación del modo automático que ajusta la temperatura automáticamente
-        temperatura = obtenerTemperaturaExterna(); // Asume un método que simula la temperatura externa
+        return "Error: La climatización está apagada.";
     }
 
     private int obtenerTemperaturaExterna() {
-        // Simulación de obtención de temperatura externa (puede ser reemplazado por datos de un sensor)
         return 25;
     }
 
-    public void activarDesempañador() {
-        if (!estadoClimatizacion) {
-            throw new IllegalStateException("Error: La climatización está apagada.");
+    public String activarDesempañador() {
+        if (estadoClimatizacion) {
+            nivelVentilacion = 5;
+            return "Desempañador activado.";
         }
-        // Implementación del desempañador (ajusta ventilación y temperatura)
-        nivelVentilacion = 5; // Máxima ventilación para desempañar
+        return "Error: La climatización está apagada.";
+    }
+
+    public String mostrarAvisoMantenimiento() {
+        return "Aviso: Se recomienda realizar mantenimiento.";
     }
 }
