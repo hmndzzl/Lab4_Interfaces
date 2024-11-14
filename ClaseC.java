@@ -1,24 +1,38 @@
 class ClaseC extends Climatizacion implements IC {
-    private int nivelHumedad = 2; // Valor inicial de humedad en modo medio
-    private boolean modoSilenciosoActivo = false;
+    private int nivelHumedad = 2;
 
     @Override
-    public void modoSilencioso() {
-        if (!estadoClimatizacion) {
-            throw new IllegalStateException("Error: La climatización está apagada.");
+    public String modoSilencioso() {
+        if (estadoClimatizacion) {
+            nivelVentilacion = Math.min(1, nivelVentilacion);
+            return "Modo silencioso activado.";
         }
-        modoSilenciosoActivo = !modoSilenciosoActivo;
-        if (modoSilenciosoActivo) {
-            nivelVentilacion = Math.min(1, nivelVentilacion); // Reduce la ventilación al mínimo
-        }
+        return "Error: La climatización está apagada.";
     }
 
     @Override
-    public void controlHumedad(int nivel) {
+    public String controlHumedad(int nivel) {
         if (nivel >= 1 && nivel <= 3) {
             nivelHumedad = nivel;
-        } else {
-            throw new IllegalArgumentException("Error: Nivel de humedad fuera de rango.");
+            return "Humedad ajustada a nivel " + nivel;
         }
+        return "Error: Nivel de humedad fuera de rango.";
+    }
+
+    @Override
+    public String activarVentilacionZona(String zona) {
+        if (estadoClimatizacion) {
+            return "Ventilación dirigida a la zona: " + zona;
+        }
+        return "Error: La climatización está apagada.";
+    }
+
+    @Override
+    public String activarCalefaccionRapida() {
+        if (estadoClimatizacion) {
+            temperatura += 5;
+            return "Calefacción rápida activada. Temperatura incrementada temporalmente a " + temperatura + " grados.";
+        }
+        return "Error: La climatización está apagada.";
     }
 }

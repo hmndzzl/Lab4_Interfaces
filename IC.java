@@ -1,4 +1,6 @@
 interface IC {
-    void modoSilencioso();
-    void controlHumedad(int nivel);
+    String modoSilencioso();
+    String controlHumedad(int nivel);
+    String activarVentilacionZona(String zona);
+    String activarCalefaccionRapida();
 }
