@@ -1,7 +1,10 @@
 interface IA {
-    void ajustarNivelVentilacion(int nivel);
-    void ventilacionDireccional(String direccion);
-    void activarIonizador();
-    void calefaccionAsientos(int nivel);
-    void calefaccionVolante(int nivel);
+    String ajustarNivelVentilacion(int nivel);
+    String ventilacionDireccional(String direccion);
+    String activarIonizador(int intensidad);
+    String calefaccionAsientos(int nivel);
+    String calefaccionVolante(int nivel);
+    String activarCalefaccionRapida();
+    String crearPerfil(String nombre);
+    String seleccionarPerfil(String nombre);
 }
