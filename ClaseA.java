@@ -1,48 +1,101 @@
+import java.util.HashMap;
+import java.util.Map;
+
 class ClaseA extends Climatizacion implements IA {
     private boolean ionizadorActivo = false;
     private String direccionVentilacion = "frontal";
+    private Map<String, Perfil> perfiles = new HashMap<>();
 
     @Override
-    public void ajustarNivelVentilacion(int nivel) {
+    public String ajustarNivelVentilacion(int nivel) {
         if (nivel >= 1 && nivel <= 5) {
             nivelVentilacion = nivel;
-        } else {
-            throw new IllegalArgumentException("Error: Nivel de ventilación fuera de rango.");
+            return "Nivel de ventilación ajustado a " + nivel;
         }
+        return "Error: Nivel de ventilación fuera de rango.";
     }
 
     @Override
-    public void ventilacionDireccional(String direccion) {
+    public String ventilacionDireccional(String direccion) {
+        if (!estadoClimatizacion) return "Error: La climatización está apagada.";
         switch (direccion.toLowerCase()) {
-            case "parabrisas", "frontal", "pies" -> direccionVentilacion = direccion;
-            case "combinado" -> direccionVentilacion = "parabrisas, frontal, pies";
-            default -> throw new IllegalArgumentException("Error: Dirección no válida.");
+            case "parabrisas", "frontal", "pies", "combinado" -> {
+                direccionVentilacion = direccion;
+                return "Dirección de ventilación ajustada a " + direccion;
+            }
+            default -> {
+                return "Error: Dirección no válida.";
+            }
         }
     }
 
     @Override
-    public void activarIonizador() {
-        if (!estadoClimatizacion) {
-            throw new IllegalStateException("Error: La climatización está apagada.");
+    public String activarIonizador(int intensidad) {
+        if (estadoClimatizacion && intensidad >= 1 && intensidad <= 3) {
+            ionizadorActivo = true;
+            return "Ionizador activado con intensidad " + intensidad;
         }
-        ionizadorActivo = !ionizadorActivo;
+        return estadoClimatizacion ? "Error: Intensidad de ionizador fuera de rango." : "Error: La climatización está apagada.";
     }
 
     @Override
-    public void calefaccionAsientos(int nivel) {
+    public String calefaccionAsientos(int nivel) {
         if (nivel >= 1 && nivel <= 3) {
-            // Implementación de ajuste de calefacción de asientos
-        } else {
-            throw new IllegalArgumentException("Error: Nivel de calefacción fuera de rango.");
+            return "Calefacción de asientos ajustada a nivel " + nivel;
         }
+        return "Error: Nivel de calefacción de asientos fuera de rango.";
     }
 
     @Override
-    public void calefaccionVolante(int nivel) {
+    public String calefaccionVolante(int nivel) {
         if (nivel == 1 || nivel == 2) {
-            // Implementación de ajuste de calefacción del volante
-        } else {
-            throw new IllegalArgumentException("Error: Nivel de calefacción de volante fuera de rango.");
+            return "Calefacción de volante ajustada a nivel " + nivel;
+        }
+        return "Error: Nivel de calefacción de volante fuera de rango.";
+    }
+
+    @Override
+    public String activarCalefaccionRapida() {
+        if (estadoClimatizacion) {
+            temperatura += 5;
+            return "Calefacción rápida activada. Temperatura incrementada temporalmente a " + temperatura + " grados.";
+        }
+        return "Error: La climatización está apagada.";
+    }
+
+    @Override
+    public String crearPerfil(String nombre) {
+        if (perfiles.size() < 3) {
+            perfiles.put(nombre, new Perfil(temperatura, nivelVentilacion, direccionVentilacion, ionizadorActivo));
+            return "Perfil " + nombre + " creado exitosamente.";
+        }
+        return "Error: Máximo de perfiles alcanzado.";
+    }
+
+    @Override
+    public String seleccionarPerfil(String nombre) {
+        Perfil perfil = perfiles.get(nombre);
+        if (perfil != null) {
+            this.temperatura = perfil.temperatura;
+            this.nivelVentilacion = perfil.nivelVentilacion;
+            this.direccionVentilacion = perfil.direccionVentilacion;
+            this.ionizadorActivo = perfil.ionizadorActivo;
+            return "Perfil " + nombre + " seleccionado.";
+        }
+        return "Error: Perfil no encontrado.";
+    }
+
+    private static class Perfil {
+        int temperatura;
+        int nivelVentilacion;
+        String direccionVentilacion;
+        boolean ionizadorActivo;
+
+        Perfil(int temperatura, int nivelVentilacion, String direccionVentilacion, boolean ionizadorActivo) {
+            this.temperatura = temperatura;
+            this.nivelVentilacion = nivelVentilacion;
+            this.direccionVentilacion = direccionVentilacion;
+            this.ionizadorActivo = ionizadorActivo;
         }
     }
 }
