@@ -1,3 +1,13 @@
+//
+// Programación Orientada a Objetos
+// Sección 20
+// Laboratorio #4 - Polimorfismo a través de Interfaces
+// 
+// Hugo Méndez - 241265
+// Diego Calderón - 241263
+// Pedro Caso - 241286
+//
+
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
